@@ -1,0 +1,15 @@
+{
+	"protocol": "",
+	"baudrate": 115200,
+	"slave": {
+		"addr": 80,
+		"port": "COM3"
+	},
+	"file": {
+		"name": "./bin/aaa.bin",
+		"symbol": "aaa.bin"
+	},
+	"test":{
+		"port": "COM3"
+	}
+}
