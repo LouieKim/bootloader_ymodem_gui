@@ -1,5 +1,7 @@
 # bootloader_ymodem_gui
 
-Referecen:
+Reference:
+
 https://github.com/serialport/electron-serialport
+
 https://github.com/ganioc/ymodem-sender-js
