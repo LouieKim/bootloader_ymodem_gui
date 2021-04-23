@@ -34,8 +34,6 @@ let rxIndex = 0;
 
 let bLoop = true;
 
-let port = null;
-
 function DelayMs (ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -126,7 +124,7 @@ async function sendFile (pot, binBuf) {
     let id = 0;
     // send out id=0 block
     do {
-        await DelayMs(1000);
+        await DelayMs(5000);
         let blockZero = Packet.getNormalPacket(
             id,
             Packet.getZeroContent(Config.file.symbol, binBuf.length));
@@ -185,7 +183,7 @@ async function sendFile (pot, binBuf) {
         let block = Packet.getNormalPacket(
             i / 128 + 1,
             payloadBuf);
-        await DelayMs(100);
+        await DelayMs(500);
         writeSerial(pot, block);
 
         let result = await ReceivePacket(pot, rxBuffer, 1, 5000);
@@ -235,7 +233,7 @@ async function sendFileAsync (pot, binBuf) {
     console.log("Sending file ...")
     return new Promise(async (resolve) => {
         do {
-            await DelayMs(400);
+            await DelayMs(500);
             writeSerial(pot, blockZero);
             console.log("- Send out blockZero");
             // ACK
@@ -313,7 +311,7 @@ async function sendFileAsync (pot, binBuf) {
                 id,
                 payloadBuf);
 
-            await DelayMs(100);
+            await DelayMs(500);
             writeSerial(pot, block, i);
 
             let result = await ReceivePacket(pot, rxBuffer, 1, 5000);
@@ -348,7 +346,7 @@ async function sendFileAsync (pot, binBuf) {
                 resolve(-3);
                 return;
             }
-            await DelayMs(100);
+            await DelayMs(500);
             writeSerial(pot, Buffer.from([EOT]));
 
             let result = await ReceivePacket(pot, rxBuffer, 1, 5000);
@@ -380,7 +378,7 @@ async function sendFileAsync (pot, binBuf) {
                 resolve(-3);
                 return;
             }
-            await DelayMs(100);
+            await DelayMs(500);
             let blockLast = Packet.getNormalPacket(
                 0,
                 new Buffer(128)
@@ -419,15 +417,16 @@ async function main () {
 
     printConfig(Config);
 
+
     console.log("Open port");
 
-    port = new SerialPort(Config.slave.port, {
+    let port = new SerialPort(Config.slave.port, {
         baudRate: Config.baudrate
     });
 
     port.on("data", (data) => {
         emData.emit("data", data);
-    });
+    })
 
     console.log("Read a bin file:", Config.file.name);
 
@@ -456,9 +455,9 @@ async function main () {
         // }
 
         preErasing(port);
-        await DelayMs(2000);
+        await DelayMs(5000);
         preWorking(port);
-        await DelayMs(1000);
+        await DelayMs(5000);
 
         console.log("- start time:", new Date().toString());
         if ((await syncWithRx(port, rxBuffer)) === true) {
@@ -466,7 +465,7 @@ async function main () {
             // process.exit(0);
             // let 
             let status = 0;
-            await DelayMs(100);
+            await DelayMs(500);
             status = await sendFileAsync(port, binary);
             if (status === 0) {
                 console.log("Send file completed")
@@ -479,13 +478,12 @@ async function main () {
             process.exit(0);
         }
         console.log("Wait 10 seconds");
-        await DelayMs(10000);
+        await DelayMs(50000);
         console.log("Resend the file")
     }
 
     console.log('-- end --');
-
-    port.close();
+    port.close()
     //process.exit();
 }
 /**
@@ -570,13 +568,13 @@ async function testUart () {
     });
     console.log("Test uart:", Config.test.port);
     while (true) {
-        await DelayMs(100);
+        await DelayMs(500);
         console.log("a");
         port.write("a");
     }
 }
 /**  ------------------------------------------------------------ */
-let bUse1K = true;
+let bUse1K = false;
 
 for (let i = 0; i < process.argv.length; i++) {
     if (process.argv[i] === "1k" || process.argv[i] === "1K") {
@@ -593,10 +591,12 @@ for (let i = 0; i < process.argv.length; i++) {
     }
 }
 
-function cdcd(){
-    let path = document.getElementById("path").files[0].path;
-    let name = document.getElementById("path").files[0].name;
-    Config.file.name = path;
-    Config.file.symbol = name;
+function ymodem_download_start(){
+    //let version = document.getElementById("version");
+    //let path = document.getElementById("path").files[0].path;
+    //let name = document.getElementById("path").files[0].name;
+
+    Config.file.name = document.getElementById("path").files[0].path;
+    Config.file.symbol = document.getElementById("path").files[0].name;
     main();
 }

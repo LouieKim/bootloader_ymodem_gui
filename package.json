@@ -25,6 +25,7 @@
         "electron-rebuild": "^2.3.4"
     },
     "dependencies": {
+        "electron-packager": "^15.2.0",
         "js-crc32": "^1.0.1",
         "serialport": "^9.0.6",
         "tableify": "^1.1.0"

@@ -127,6 +127,106 @@ function device_ctrl(device_id, cmd)
     console.log("device_ctrl_Success");
 }
 
+function OnConvert(doom)
+    {
+        hex = doom;
+        hex = hex.match(/[0-9A-Fa-f]{2}/g);
+        len = hex.length;
+        if( len==0 ) return;
+        txt='';
+        for(i=0; i<len; i++)
+        {
+            h = hex[i];
+            code = parseInt(h,16);
+            t = String.fromCharCode(code);
+            txt += t;
+        }
+        return txt;
+    }
+
+async function check_version(){
+    let port = new SerialPort(Config.test.port, {
+        baudRate: Config.baudrate
+    });
+
+    console.log("Test uart:", Config.test.port);
+
+    console.log("Send Version");
+
+    port.write('a')
+
+    port.on('data', function (data) {
+        //let txt = Buffer.from(Buffer.concat(data), 'hex').toString('ascii');
+        //let txt2 = OnConvert(txt);
+        
+        console.log('Data:', data.toString("ascii"));
+        port.close();
+      })
+
+
+      /*
+
+    port.on('open', function(){
+        console.log("Serial Port Open");
+        port.write('a')
+
+        port.on('data', function (data) {
+            console.log("Firmware Version:", data[0]);
+        })
+    });
+
+    //await DelayMs(100);
+
+    console.log("END");
+
+    port.close();
+    */
+}
+
+async function ready_download(){
+    let port = new SerialPort(Config.test.port, {
+        baudRate: Config.baudrate
+    });
+    console.log("Test uart:", Config.test.port);
+
+    port.write('1')
+
+    port.on('data', function (data) {
+        //let txt = Buffer.from(Buffer.concat(data), 'hex').toString('ascii');
+        //let txt2 = OnConvert(txt);
+        
+        console.log('Data:', data.toString("ascii"));
+        port.close();
+      })
+
+      /*
+    port.write('1', function(err) {
+        if (err) {
+          return console.log('Error on write: ', err.message)
+        }
+        console.log('message written')
+      })
+
+
+
+
+    console.log("Send Ready Download");
+    port.write("1");
+
+    await DelayMs(100);
+
+    sp.on('data', function (data) {
+        console.log("Firmware Ready:", data[0]);
+    })
+
+    port.close();
+*/
+}
+
+
+function consoleTest(){
+    console.log("Test");
+}
 
 function connect_port(port_name)
 {

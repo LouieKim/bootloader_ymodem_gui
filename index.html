@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <link rel="stylesheet" href="./style.css">
     <meta charset="UTF-8">
     <title>Hello World!!</title>
     <style>
@@ -11,16 +12,48 @@
 </head>
 
 <body>
-    <h1>Hello World!</h1>
+    <div class="login-box">
+        <h2>EVERON BOOT LOADER</h2>
+        
+        <select id="port_list"></select>
+        <input type="button" onclick="seral_port_list()" value="Port Refresh" />
+        <div style="padding:10px;"></div>
 
-    We are using Node.js <span id="node-version"></span>, Chromium <span id="chrome-version"></span>, Electron <span id="electron-version"></span>, and Serialport <span id="serialport-version"></span>
+        <form>
+          <div class="user-box">
+            <input type="text" name="version" id="version" />
+            <label>Version</label>
+          </div>
+          <div>
+            <a onclick="check_version()">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                Check Version
+            </a>
+          </div>
 
-    <select id="port_list"></select>
-    <!-- <input type="button" class="btn btn-secondary" onclick="seral_port_list()" value="Port Refresh" /> -->
-    <input type="button" class="btn btn-secondary" onclick="seral_port_list()" value="Port Refresh" />
-    <input type="button" class="btn btn-secondary" onclick="cdcd()" value="cdcd" />
-    <input type="file" name="path" id="path" />
+          <input type="button" onclick="ready_download()" value="Ready Download" />
 
+          <div style="padding:10px;"></div>
+
+          <div class="user-box">
+            <input type="file" name="path" id="path" />
+            <label>FILE</label>
+          </div>
+
+          <div>
+            <a onclick="ymodem_download_start()">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                Download
+            </a>
+          </div>
+    </form>
+      </div>
 </body>
 
 <script src="./serial_data.js"></script>
